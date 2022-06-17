@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Home from "../Home"
+
 
 const ContainerFiltros = styled.div`
     flex:1;
@@ -17,6 +19,7 @@ const ContainerFiltros = styled.div`
     inputMaximo:'',
     inputBusca:''
   }
+
 
   handleInputMinimo = (event) => {
     this.setState({inputMinimo: event.target.value})
@@ -36,19 +39,34 @@ const ContainerFiltros = styled.div`
     localStorage.setItem("busca", this.state.inputBusca)
   }
 
+  pegarDados=()=>{ 
+    const dadosMinimo =  localStorage.getItem('minimo')
+    const dadosMaximo =  localStorage.getItem('maximo')
+    const dadosBusca =  localStorage.getItem('busca')
+
+
+   }
+
+  componentDidUpdate() {
+    this.salvar()
+  }
+
+
     
     render(){
         return(
         <ContainerFiltros>
+          {/* {this.props.preco}
+          {this.props.nome}
+          {console.log(this.props.preco)} */}
+
             <h3>Filtros</h3>
             Valor mínimo:<br/>
             <input type="number" onChange={this.handleInputMinimo} value={this.state.inputMinimo}></input><br/><br/>
             Valor máximo:<br/>
-            <input type="number" onChange={this.handleInputMaximo}></input><br/><br/>
+            <input type="number" onChange={this.handleInputMaximo} value={this.state.inputMaximo}></input><br/><br/>
             Busca por nome:<br/>
-            <input type="text" onChange={this.handleInputBusca}></input><br/><br/>
-            <button onClick={this.salvar}>salvar</button>
-
+            <input type="text" onChange={this.handleInputBusca} value={this.state.inputBusca}></input><br/><br/>
         </ContainerFiltros>
    );}
 
