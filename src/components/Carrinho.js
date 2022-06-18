@@ -6,7 +6,7 @@ const ContainerFiltros = styled.div`
     border:2px solid black;
     min-height:calc(100vh - 44px);
     text-align:center;
-    margin-right:20px;
+    margin-bottom:20px;
 `
 
 

@@ -6,68 +6,32 @@ import Home from "../Home"
 const ContainerFiltros = styled.div`
     flex:1;
     border:2px solid black;
-    min-height:calc(100vh - 44px);
+    min-height: calc(100vh - 44px);
     text-align:center;
     margin-right:20px;
+    margin-bottom:20px;
 `
-
+const Container = styled.div`
+    background-color:red;
+    height:100px;
+    width:100%;
+    color:white;
+    text-align:center;
+`
 
  class Filtros extends React.Component {
 
-  state = {
-    inputMinimo: '',
-    inputMaximo:'',
-    inputBusca:''
-  }
-
-
-  handleInputMinimo = (event) => {
-    this.setState({inputMinimo: event.target.value})
-  }
-
-  handleInputMaximo = (event) => {
-    this.setState({inputMaximo: event.target.value})
-  }
-
-  handleInputBusca = (event) => {
-    this.setState({inputBusca: event.target.value})
-  }
-
-  salvar = () => {
-    localStorage.setItem("minimo", this.state.inputMinimo)
-    localStorage.setItem("maximo", this.state.inputMaximo)
-    localStorage.setItem("busca", this.state.inputBusca)
-  }
-
-  pegarDados=()=>{ 
-    const dadosMinimo =  localStorage.getItem('minimo')
-    const dadosMaximo =  localStorage.getItem('maximo')
-    const dadosBusca =  localStorage.getItem('busca')
-
-
-   }
-
-  componentDidUpdate() {
-    this.salvar()
-  }
-
-
-    
     render(){
         return(
         <ContainerFiltros>
-          {/* {this.props.preco}
-          {this.props.nome}
-          {console.log(this.props.preco)} */}
-
             <h3>Filtros</h3>
             Valor mínimo:<br/>
-            <input type="number" onChange={this.handleInputMinimo} value={this.state.inputMinimo}></input><br/><br/>
+            <input type="number" onChange={this.props.handleInputMinimo} value={this.props.filtroMinimo}></input><br/><br/>
             Valor máximo:<br/>
-            <input type="number" onChange={this.handleInputMaximo} value={this.state.inputMaximo}></input><br/><br/>
+            <input type="number" onChange={this.props.handleInputMaximo} value={this.props.filtroMaximo}></input><br/><br/>
             Busca por nome:<br/>
-            <input type="text" onChange={this.handleInputBusca} value={this.state.inputBusca}></input><br/><br/>
-        </ContainerFiltros>
+            <input type="text" onChange={this.props.handleInputBusca} value={this.props.filtroBusca}></input><br/><br/>
+        </ContainerFiltros>        
    );}
 
 
