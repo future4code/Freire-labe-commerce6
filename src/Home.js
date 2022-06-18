@@ -7,88 +7,85 @@ const ContainerHome = styled.div`
   flex: 2;
   border: 2px solid black;
   min-height: calc(100vh - 44px);
-  text-align: center;
   display: flex;
+  justify-content:center;
   flex-wrap: wrap;
   margin-right: 20px;
+  margin-left:20px;
+  margin-bottom:20px;
 `;
 const Produto = styled.div`
   border: 2px solid black;
-  margin: 10px;
+  margin: 5px;
   max-height: 350px;
+  text-align:center;
 `;
 const Label = styled.div`
   width:100%;
+  height:50px;
   display:flex;
-  justify-content:flex-end;
+  justify-content:space-between;
+  align-items:flex-end;
   padding:20px;
 `;
 
+
+
 class Home extends React.Component {
   state = {
-    inputUsuario: "",
-    inputTexto: "",
-    mensagens: [],
-    objeto: [
-      {
-       nome: 'Produto 1',
-       preco: 200,
-       imagem: 'https://picsum.photos/seed/a/200',
-      },
-      {
-        nome: 'Produto 2',
-        preco: 100,
-        imagem: 'https://picsum.photos/seed/b/200',
-      },
-      {
-        nome: 'Produto 3',
-        preco: 50,
-        imagem: 'https://picsum.photos/seed/c/200',
-      },
-      {
-        nome: 'Produto 4',
-        preco: 10,
-        imagem: 'https://picsum.photos/seed/d/200',
-      },
-      {
-        nome: 'Produto 5',
-        preco: 2100,
-        imagem: 'https://picsum.photos/seed/e/200',
-      },
-      {
-        nome: 'Produto 6',
-        preco: 2000,
-        imagem: 'https://picsum.photos/seed/f/200',
-      },
-    ]
-  };
+    sort: "Decrescente"
+  }
+
+  pegaListaFiltrada = () => {
+    return this.props.produtos
+      .filter((produto) => this.props.filtroMinimo ? produto.preco < this.props.filtroMaximo : true)
+      .filter((produto) => this.props.filtroMaximo ? produto.preco > this.props.filtroMinimo : true)
+      .filter((produto) => this.props.filtroBusca ? produto.nome.includes(this.props.filtroBusca) : true)
+      .sort((a, b) => this.state.sort === "Crescente" ? a.preco - b.preco : b.preco - a.preco)
+  }
+
+  // componentDidUpdate(){
+  //   this.pegaListaFiltrada()
+  // }
+
+  onChangeSort = (event) => {
+    this.setState({sort: event.target.value})
+  }
 
   render() {
-    let produtos = this.state.objeto.map((obj) => {
-      return(
-        <Produto>
-          <img src={obj.imagem}/>
-          <h3>{obj.nome}</h3>
-          <p>R${obj.preco},00</p>
-        </Produto>
-      )
-    })
+    const ListaFiltrada = this.pegaListaFiltrada()
+    console.log(ListaFiltrada)
+
     return (
       <ContainerHome>
         <Label>
-            Ordenação:
+          <div>
+            {`Quantidade de produtos: ${ListaFiltrada.length}`}
+          </div>
+          <div>
+            <span>Ordenação: </span>
             <label for="filter" id="filter">
-            <select name="filter" id="filter">
-                <option value="Crescente">Crescente</option>
-                <option value="Decrescente">Decrescente</option>
+            <select name="filter" id="filter" value={this.state.sort} onChange={this.onChangeSort}>
+                <option value={"Crescente"}>Crescente</option>
+                <option value={"Decrescente"}>Decrescente</option>
             </select>
             </label>
+          </div>
+
         </Label>
-            {produtos}
-            {/* <Filtros id="mostrar"
-              preco={valores}
-              nome={nomes}
-            /> */}
+        {ListaFiltrada.map((produto) => {
+          return(
+            <Produto>
+              <img src={produto.imagem}/>
+              <h3>{produto.nome}</h3>
+              <p>R${produto.preco},00</p>
+              {/* <button onClick={() => this.props.adicionarProdutosCarrinho(produto.id)}>
+                Adicionar ao carrinho
+              </button> */}
+            </Produto>
+          )       
+        })}
+
       </ContainerHome>
     );
   }

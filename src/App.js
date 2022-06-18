@@ -1,62 +1,77 @@
 import React from "react";
-import logo from './logo.svg';
-import './App.css';
-import styled from 'styled-components';
-import Filtros from "./components/Filtros"
-import Home from "./Home"
-import Carrinho from "./components/Carrinho"
-
-
+import logo from "./logo.svg";
+import "./App.css";
+import styled from "styled-components";
+import Filtros from "./components/Filtros";
+import Home from "./Home";
+import Carrinho from "./components/Carrinho";
 
 const Layout = styled.div`
-display: flex;
-height: 100%;
-width: 100%;
-flex-direction: row;
-`
+  display: flex;
+  min-height: calc(100vh - 44px);
+  flex-direction: row;
+  margin: 20px;
+`;
 
+const produtos = [
+  {
+    id: 1,
+    nome: "Produto 1",
+    preco: 200,
+    imagem: "https://picsum.photos/seed/a/200",
+  },
+  {
+    id: 2,
+    nome: "Produto 2",
+    preco: 100,
+    imagem: "https://picsum.photos/seed/b/200",
+  },
+  {
+    id: 3,
+    nome: "Produto 3",
+    preco: 50,
+    imagem: "https://picsum.photos/seed/c/200",
+  },
+  {
+    id: 4,
+    nome: "Produto 4",
+    preco: 10,
+    imagem: "https://picsum.photos/seed/d/200",
+  },
+  {
+    id: 5,
+    nome: "Produto 5",
+    preco: 2100,
+    imagem: "https://picsum.photos/seed/e/200",
+  },
+  {
+    id: 6,
+    nome: "Produto 6",
+    preco: 2000,
+    imagem: "https://picsum.photos/seed/f/200",
+  },
+];
 
 class App extends React.Component {
   state = {
-    inputUsuario: "",
-    inputTexto: "",
-    mensagens: [],
-    inputMinimo: '',
-    inputMaximo:'',
-    inputBusca:'',
-    objeto: [
+    inputMinimo: 1,
+    inputMaximo: 10000,
+    inputBusca: "Produto",
+    carrinhoProdutos: [
       {
-       nome: 'Produto 1',
-       preco: 200,
-       imagem: 'https://picsum.photos/seed/a/200',
-      },
-      {
-        nome: 'Produto 2',
-        preco: 100,
-        imagem: 'https://picsum.photos/seed/b/200',
-      },
-      {
-        nome: 'Produto 3',
-        preco: 50,
-        imagem: 'https://picsum.photos/seed/c/200',
-      },
-      {
-        nome: 'Produto 4',
-        preco: 10,
-        imagem: 'https://picsum.photos/seed/d/200',
-      },
-      {
-        nome: 'Produto 5',
-        preco: 2100,
-        imagem: 'https://picsum.photos/seed/e/200',
-      },
-      {
-        nome: 'Produto 6',
+        id: 6,
+        nome: "Produto 6",
         preco: 2000,
-        imagem: 'https://picsum.photos/seed/f/200',
+        imagem: "https://picsum.photos/seed/f/200",
       },
+      {
+        id: 5,
+        nome: "Produto 5",
+        preco: 2100,
+        imagem: "https://picsum.photos/seed/e/200",
+      }
     ]
-  };
+  }
 
   handleInputMinimo = (event) => {
     this.setState({inputMinimo: event.target.value})
@@ -70,44 +85,68 @@ class App extends React.Component {
     this.setState({inputBusca: event.target.value})
   }
 
-  salvar = () => {
-    localStorage.setItem("minimo", this.state.inputMinimo)
-    localStorage.setItem("maximo", this.state.inputMaximo)
-    localStorage.setItem("busca", this.state.inputBusca)
+  adicionarProdutosCarrinho = (id) => {
+    const produtosCarrinho = this.state.carrinhoProdutos.find(produto => id === produto.id)
+
+    if(produtosCarrinho) {
+      const novoProdutosCarrinho = this.state.carrinhoProdutos.map(produto => {
+        if(id === produto.id) {
+          return {
+            ...produto,
+            quantidade: produto.quantidade + 1
+          }
+        }
+
+        return produto
+      })
+
+      this.setState({carrinhoProdutos: novoProdutosCarrinho})
+    } else {
+      const produtoAdicionado = produtos.find(produto => id === produto.id)
+
+      const novoProdutosCarrinho = [...this.state.carrinhoProdutos, {...produtoAdicionado, quantidade: 1}]
+
+      this.setState({produtosInCart: novoProdutosCarrinho})
+    }
   }
 
-  pegarDados=()=>{ 
-    const dadosMinimo =  localStorage.getItem('minimo')
-    const dadosMaximo =  localStorage.getItem('maximo')
-    const dadosBusca =  localStorage.getItem('busca')
+  removerProdutosCarrinho = (id) => {
+    const novoProdutosCarrinho = this.state.carrinhoProdutos.map((produto) => {
+      if(produto.id === id) {
+        return {
+          ...produto,
+          quantidade: produto.quantidade - 1
+        }
+      }
+      return produto
+    }).filter((produto) => produto.quantidade > 0)
 
-
-   }
-
-  componentDidUpdate() {
-    this.salvar()
+    this.setState({carrinhoProdutos: novoProdutosCarrinho})
   }
-
-  
-
-
-
-  render(){
+  render() {
     return (
       <Layout>
-        <Filtros>
-          teste
-        </Filtros>
-        <Home>
-          teste
-        </Home>
-        <Carrinho>
-          teste
-        </Carrinho>
+        <Filtros
+          filtroMinimo={this.state.inputMinimo}
+          filtroMaximo={this.state.inputMaximo}
+          filtroBusca={this.state.inputBusca}
+          handleInputMinimo={this.handleInputMinimo}
+          handleInputMaximo={this.handleInputMaximo}
+          handleInputBusca={this.handleInputBusca}
+        />
+        <Home
+          produtos={produtos}
+          filtroMinimo={this.state.inputMinimo}
+          filtroMaximo={this.state.inputMaximo}
+          filtroBusca={this.state.inputBusca}
+        />
+        <Carrinho
+          carrinhoProdutos={this.state.carrinhoProdutos}
+          removerProdutosCarrinho={this.removerProdutosCarrinho}
+        />
       </Layout>
     );
   }
-  
 }
 
 export default App;
