@@ -79,9 +79,9 @@ class Home extends React.Component {
               <img src={produto.imagem}/>
               <h3>{produto.nome}</h3>
               <p>R${produto.preco},00</p>
-              {/* <button onClick={() => this.props.adicionarProdutosCarrinho(produto.id)}>
+              <button onClick={() => this.props.adicionarProdutosCarrinho(produto.id)}>
                 Adicionar ao carrinho
-              </button> */}
+              </button>
             </Produto>
           )       
         })}

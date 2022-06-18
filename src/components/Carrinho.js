@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+
 const ContainerFiltros = styled.div`
     flex:1;
     border:2px solid black;
@@ -11,50 +12,36 @@ const ContainerFiltros = styled.div`
 
 
  class Carrinho extends React.Component {
+  pegarValorTotal = () => {
+    let valorTotal = 0
 
-  state = {
-    inputMinimo: '',
-    inputMaximo:'',
-    inputBusca:''
+    for(let produto of this.props.carrinhoProdutos) {
+      valorTotal += produto.preco * produto.quantidade
+    }
+
+    return valorTotal
   }
 
-  handleInputMinimo = (event) => {
-    this.setState({inputMinimo: event.target.value})
-  }
+  render() {
+    return <div>
+      <h3>Carrinho:</h3>
+      <div>
+        {this.props.carrinhoProdutos.map((produto) => {
+          return <div>
+          <p>{produto.quantidade}x</p>
+          <p>{produto.nome}</p>
+          <button 
+            onClick={() => this.props.removerProdutosCarrinho(produto.id)}
+          >
+            Remover
+          </button>
+        </div>         
+  })}
+  </div>
+  <p>Valor total: R${this.pegarValorTotal()},00</p>
+  </div>
 
-  handleInputMaximo = (event) => {
-    this.setState({inputMaximo: event.target.value})
-  }
-
-  handleInputBusca = (event) => {
-    this.setState({inputBusca: event.target.value})
-  }
-
-  salvar = () => {
-    localStorage.setItem("minimo", this.state.inputMinimo)
-    localStorage.setItem("maximo", this.state.inputMaximo)
-    localStorage.setItem("busca", this.state.inputBusca)
-  }
-
-    
-    render(){
-        return(
-        <ContainerFiltros>
-            <h3>Filtros</h3>
-            Valor mínimo:<br/>
-            <input type="number" onChange={this.handleInputMinimo} value={this.state.inputMinimo}></input><br/><br/>
-            Valor máximo:<br/>
-            <input type="number" onChange={this.handleInputMaximo}></input><br/><br/>
-            Busca por nome:<br/>
-            <input type="text" onChange={this.handleInputBusca}></input><br/><br/>
-            <button onClick={this.salvar}>salvar</button>
-
-        </ContainerFiltros>
-   );}
-
-
-
+ }
 }
 
 export default Carrinho
-
