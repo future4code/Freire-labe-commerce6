@@ -1,36 +1,48 @@
 import React from "react";
 import styled from "styled-components";
-import Home from "../Home"
+import filtro from "../imagens/filtro.png";
+
 
 
 const ContainerFiltros = styled.div`
-    flex:1;
-    border:2px solid black;
-    min-height: calc(100vh - 44px);
-    text-align:center;
-    margin-right:20px;
-    margin-bottom:20px;
+  padding:5px 20px;
+  border:1px solid #ccc;
+  background-color:#eee;
+  margin-right:100px;
 `
-const Container = styled.div`
-    background-color:red;
-    height:100px;
-    width:100%;
-    color:white;
-    text-align:center;
+const Filtro = styled.div`
+display:flex;
+line-height:35px;
+
+`
+const FiltroNome = styled.div`
+display:flex;
+align-items: center;
+justify-content: space-between;
+
 `
 
  class Filtros extends React.Component {
 
     render(){
         return(
-        <ContainerFiltros>
-            <h3>Filtros</h3>
-            Valor mínimo:<br/>
+        <ContainerFiltros class="filtro">
+            <FiltroNome>
+              <span><h3>Filtros</h3></span>
+              <span><img src={filtro} width="40" height="40"/><br/></span>
+            </FiltroNome>
+            <Filtro>
+            Valor mínimo:
+            </Filtro>
             <input type="number" onChange={this.props.handleInputMinimo} value={this.props.filtroMinimo}></input><br/><br/>
-            Valor máximo:<br/>
+            <Filtro>
+            Valor máximo:
+            </Filtro>
             <input type="number" onChange={this.props.handleInputMaximo} value={this.props.filtroMaximo}></input><br/><br/>
-            Busca por nome:<br/>
-            <input type="text" onChange={this.props.handleInputBusca} value={this.props.filtroBusca}></input><br/><br/>
+            <Filtro>
+            Filtro por nome:
+            </Filtro>
+            <input type="text" onChange={this.props.handleInputFiltro} value={this.props.filtroFiltro}></input><br/><br/>
         </ContainerFiltros>        
    );}
 
